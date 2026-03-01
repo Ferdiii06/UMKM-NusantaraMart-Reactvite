@@ -130,8 +130,9 @@ function Navbar() {
                         {['Beranda', 'Kategori', 'Produk', 'Promo', 'Kontak'].map((item) => (
                             <a 
                                 key={item}
-                                href={item === 'Beranda' ? '/' : `/${item}`} 
+                                href="#" 
                                 className="text-gray-800 font-semibold text-sm hover:text-green-600 transition-colors py-4 border-b-2 border-transparent hover:border-green-600"
+                                onClick={(e) => e.preventDefault()}
                             >
                                 {item}
                             </a>
