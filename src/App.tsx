@@ -14,7 +14,7 @@ function App() {
             </h1>
             
             <p className="text-gray-700 text-sm md:text-base leading-relaxed max-w-lg mx-auto md:mx-0">
-              <span className="italic font-medium">Nusantara Mart</span> Nusantara Mart merupakan unit usaha mikro, kecil, dan menengah (UMKM) yang bergerak di bidang ritel modern, menyediakan aneka kebutuhan pokok sehari-hari. Keunggulan kami terletak pada kurasi produk lokal unggulan yang berasal dari berbagai daerah di Indonesia. Melalui platform ini, kami berkomitmen untuk mendukung dan memberdayakan produsen lokal dengan memfasilitasi akses pasar yang lebih luas guna menjangkau konsumen di seluruh Nusantara.
+              <span className="italic font-medium">Nusantara Mart</span> adalah unit usaha mikro, kecil, dan menengah (UMKM) yang bergerak di bidang ritel modern, menyediakan aneka kebutuhan pokok sehari-hari. Keunggulan kami terletak pada kurasi produk lokal unggulan yang berasal dari berbagai daerah di Indonesia. Melalui platform ini, kami berkomitmen untuk mendukung dan memberdayakan produsen lokal dengan memfasilitasi akses pasar yang lebih luas guna menjangkau konsumen di seluruh Nusantara.
             </p>
             
             <div className="pt-4">
