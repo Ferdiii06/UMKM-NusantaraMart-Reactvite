@@ -1,9 +1,37 @@
 // Tailwind menyediakan semua styling yang diperlukan
 
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 function Footer() {
+    const footerRef = useRef<HTMLElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        if (!footerRef.current || !contentRef.current) return;
+
+        // Curtain reveal effect: footer content moves up as you scroll to it
+        gsap.fromTo(contentRef.current, 
+            { y: 100, opacity: 0 },
+            {
+                y: 0, 
+                opacity: 1,
+                scrollTrigger: {
+                    trigger: footerRef.current,
+                    start: "top bottom", 
+                    end: "bottom bottom",
+                    scrub: 1
+                }
+            }
+        );
+    }, []);
+
     return (
-        <footer className="bg-gray-800 text-white py-12 px-6 md:px-12">
-            {/* Grid Configuration: 
+        <footer ref={footerRef} className="bg-gray-800 text-white py-12 px-6 md:px-12 overflow-hidden">
+            <div ref={contentRef}>
+                {/* Grid Configuration: 
                 - grid-cols-1 (HP)
                 - sm:grid-cols-2 (Tablet)
                 - lg:grid-cols-4 (Laptop) 
@@ -74,6 +102,7 @@ function Footer() {
             {/* Bottom Copyright Area */}
             <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-700 text-center text-xs text-gray-500">
                 <p>&copy; {new Date().getFullYear()} Nusantara Mart Sidoarjo. All rights reserved.</p>
+            </div>
             </div>
         </footer>
     );

@@ -1,9 +1,10 @@
 import { useContext } from 'react';
-import { CartContext } from './CartContext';
+import { CartContext } from './Context'; // Import dari file terpisah
 
-// Fungsi untuk mengakses konteks keranjang belanjanya
 export function useCart() {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error('useCart must be used within CartProvider');
-  return ctx;
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
 }

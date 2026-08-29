@@ -1,71 +1,85 @@
-import React, { createContext, useState } from 'react';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
-import type { Product } from '../data/products'; 
+import type { Product } from '../data/products';
+import { CartContext } from './Context'; // Import dari file terpisah
 
-export type CartItem = {
+// Type untuk item keranjang
+export interface CartItem {
   product: Product;
   quantity: number;
-};
+}
 
-// Tipe definisi konteks keranjang belanja
-type CartContextType = {
+// Type untuk context
+export interface CartContextType {
   cartItems: CartItem[];
-  totalCount: number;
-  addToCart: (product: Product, qty?: number) => void;
+  addToCart: (product: Product, quantity: number) => void;
   removeFromCart: (productId: number) => void;
+  updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
-};
+  totalItems: number;
+  totalPrice: number;
+}
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const CartContext = createContext<CartContextType | undefined>(undefined);
-
+// Provider component
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-    try {
-      const stored = localStorage.getItem('cart');
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      // ignore errors reading localStorage
-      return [];
-    }
-  });
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const totalCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-
-  // Fungsi  menambahkan produk ke keranjang
-  function addToCart(product: Product, qty = 1) {
-    setCartItems((prev) => {
-      const existing = prev.find((i) => i.product.id === product.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.product.id === product.id
-            ? { ...i, quantity: i.quantity + qty }
-            : i,
+  const addToCart = (product: Product, quantity: number) => {
+    setCartItems(prev => {
+      const existingItem = prev.find(item => item.product.id === product.id);
+      
+      if (existingItem) {
+        return prev.map(item =>
+          item.product.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
         );
       }
-      return [...prev, { product, quantity: qty }];
+      
+      return [...prev, { product, quantity }];
     });
-  }
+  };
 
-  function removeFromCart(productId: number) {
-    setCartItems((prev) => prev.filter((i) => i.product.id !== productId));
-  }
-// Fungsi  mengosongkan keranjang
-  function clearCart() {
-    setCartItems([]);
-  }
+  const removeFromCart = (productId: number) => {
+    setCartItems(prev => prev.filter(item => item.product.id !== productId));
+  };
 
-  // persist
-  React.useEffect(() => {
-    try {
-      localStorage.setItem('cart', JSON.stringify(cartItems));
-    } catch {
-      // ignore write errors
+  const updateQuantity = (productId: number, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
     }
-  }, [cartItems]);
+    
+    setCartItems(prev =>
+      prev.map(item =>
+        item.product.id === productId ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+
+  const contextValue: CartContextType = {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    totalItems,
+    totalPrice
+  };
 
   return (
-    <CartContext.Provider value={{ cartItems, totalCount, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );

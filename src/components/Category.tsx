@@ -1,109 +1,90 @@
-import { useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-// Data kategori tetap sama sesuai file asli Anda
+// Data kategori dengan mapping ke kategori di products.ts
 const categories = [
   {
-    title: "Frozen Foods",
-    image: "https://i.pinimg.com/1200x/95/9f/7b/959f7b3491e447311a87f99b565533f5.jpg",
+    title: "Frozen Food",
+    image: "https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9", // Daging/Frozen (Frozen peas/meat)
     bg: "bg-green-100",
   },
   {
-    title: "Meat and Fish",
-    image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f",
-    bg: "bg-pink-100",
-  },
-  {
-    title: "Milk & Dairy",
-    image: "https://i.pinimg.com/736x/15/be/a6/15bea6e7d63ea080ea62cf78b11f461e.jpg",
-    bg: "bg-gray-100",
-  },
-  {
-    title: "Beverages",
-    image: "https://images.unsplash.com/photo-1613478223719-2ab802602423",
-    bg: "bg-green-50",
-  },
-  {
-    title: "Vegetables",
-    image: "https://images.unsplash.com/photo-1610348725531-843dff563e2c",
+    title: "Sayuran",
+    image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37", // Sayuran
     bg: "bg-orange-100",
   },
   {
+    title: "Beras",
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c", // Beras
+    bg: "bg-gray-100",
+  },
+  {
+    title: "Sembako",
+    image: "https://images.unsplash.com/photo-1608686207856-001b95cf60ca", // Minyak/Sembako
+    bg: "bg-green-50",
+  },
+  {
+    title: "Minuman",
+    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97", // Minuman botol
+    bg: "bg-blue-100",
+  },
+  {
     title: "Snacks",
-    image: "https://i.pinimg.com/736x/9c/7c/2a/9c7c2ad2a132cb1f63977d37f52f828e.jpg",
+    image: "https://images.unsplash.com/photo-1621939514649-280e2ee25f60", // Snack/Cemilan
     bg: "bg-yellow-100",
+  },
+  {
+    title: "Kebutuhan Rumah",
+    image: "https://images.unsplash.com/photo-1585421514738-01798e348b17", // Alat kebersihan
+    bg: "bg-purple-100",
   },
 ];
 
 export default function Category() {
-  const sliderRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
-  const scrollLeft = () => {
-    sliderRef.current?.scrollBy({ left: -300, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    sliderRef.current?.scrollBy({ left: 300, behavior: "smooth" });
+  // Fungsi untuk menangani klik kategori
+  const handleCategoryClick = (categoryTitle: string) => {
+    const encodedCategory = encodeURIComponent(categoryTitle);
+    navigate(`/category/${encodedCategory}`);
   };
 
   return (
-    <section className="w-full py-12 md:py-16 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 relative group">
+    <section className="w-full py-10 md:py-16 bg-white border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         
-        {/* Header: Dibuat lebih menonjol */}
-        <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Kategori Populer</h2>
-          <p className="text-gray-500 text-sm md:text-base">Jelajahi Kategori Produk Kami</p>
+        {/* Header */}
+        <div className="flex justify-between items-end mb-6 md:mb-10">
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800">Kategori</h2>
+            <p className="text-gray-500 text-xs md:text-sm mt-1">Pilihan kategori untuk Anda</p>
+          </div>
         </div>
 
-        {/* Navigation Buttons: Diletakkan di luar kontainer slider agar tidak menutupi kartu */}
-        <button
-          onClick={scrollLeft}
-          className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-xl p-3 rounded-full z-20 hidden md:flex items-center justify-center hover:bg-green-500 hover:text-white transition-all border border-gray-100 -ml-4 lg:-ml-6"
-          aria-label="Scroll Left"
-        >
-          <ChevronLeft size={24} />
-        </button>
-
-        {/* Slider Container: Menambahkan 'scrollbar-hide' dan padding horizontal agar kartu tidak terpotong di tepi */}
-        <div
-          ref={sliderRef}
-          className="flex gap-4 md:gap-6 overflow-x-auto scroll-smooth scrollbar-hide px-2 pb-6"
-        >
+        {/* Grid Ikon Minimalis */}
+        <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-7 gap-y-6 gap-x-2 md:gap-6 justify-items-center">
           {categories.map((category, index) => (
             <div
               key={index}
-              className={`min-w-[160px] sm:min-w-[200px] md:min-w-[220px] h-64 md:h-72 rounded-2xl shadow-sm ${category.bg} flex flex-col items-center justify-between p-6 transition duration-300 hover:shadow-lg hover:scale-105 cursor-pointer flex-shrink-0 border border-transparent hover:border-white/50`}
+              onClick={() => handleCategoryClick(category.title)}
+              className="flex flex-col items-center gap-3 cursor-pointer group w-full max-w-[90px] md:max-w-[120px]"
             >
-              <h3 className="text-sm md:text-base font-bold text-gray-700 text-center">
-                {category.title}
-              </h3>
-
-              <div className="flex-1 flex items-center justify-center w-full">
+              {/* Ikon Bulat */}
+              <div className={`w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-full ${category.bg} flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300 transform group-hover:-translate-y-1 overflow-hidden border-2 border-transparent group-hover:border-green-400`}>
                 <img
-                  src={`${category.image}?auto=format&fit=crop&w=300&q=80`}
+                  src={`${category.image}?auto=format&fit=crop&w=150&q=80`}
                   alt={category.title}
-                  className="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-md"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
+              
+              {/* Teks Kategori */}
+              <span className="text-[10px] md:text-xs font-semibold text-gray-700 text-center leading-tight group-hover:text-green-600 transition-colors line-clamp-2">
+                {category.title}
+              </span>
             </div>
           ))}
         </div>
 
-        <button
-          onClick={scrollRight}
-          className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-xl p-3 rounded-full z-20 hidden md:flex items-center justify-center hover:bg-green-500 hover:text-white transition-all border border-gray-100 -mr-4 lg:-mr-6"
-          aria-label="Scroll Right"
-        >
-          <ChevronRight size={24} />
-        </button>
-
-        {/* Mobile Indicator: Memberi tahu user bahwa ini bisa di-swipe di HP */}
-        <div className="flex md:hidden justify-center gap-1 mt-2">
-          <div className="w-8 h-1 bg-gray-200 rounded-full italic text-[10px] text-gray-400 text-center w-full">
-            ← Geser untuk melihat kategori lainnya →
-          </div>
-        </div>
       </div>
     </section>
   );

@@ -1,26 +1,16 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import { BrowserRouter } from 'react-router-dom'
+import { CartProvider } from './context/CartContext'
 import App from './App'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import Category from './components/Category'
-import Product from './components/Product'
-import Promo from './components/Promo'
-import Contact from './components/Contact'
-
-import { CartProvider } from './context/CartContext';
+import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <CartProvider>
-      <Navbar/>
-      <App />
-      <Category />
-      <Product/>
-      <Promo/>
-      <Contact/>
-      <Footer/>
-    </CartProvider>
+    <BrowserRouter>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </BrowserRouter>
   </StrictMode>,
 )
